@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 import 'models/book.dart';
@@ -145,6 +146,62 @@ class _AuthGateState extends State<AuthGate> {
         ),
       ),
 >>>>>>> c7d6be6a991323bdcd66709b7c0ff3ed573369b5
+=======
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'repositories/local_book_repository.dart';
+import 'repositories/remote_book_repository.dart';
+import 'screens/reader_screen.dart';
+import 'services/sync_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final localRepository = LocalBookRepository();
+  final remoteRepository = RemoteBookRepository();
+  final syncService = SyncService(
+    localRepository: localRepository,
+    remoteRepository: remoteRepository,
+  );
+
+  await syncService.initialize();
+
+  runApp(MyApp(
+    localRepository: localRepository,
+    remoteRepository: remoteRepository,
+    syncService: syncService,
+  ));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({
+    super.key,
+    required this.localRepository,
+    required this.remoteRepository,
+    required this.syncService,
+  });
+
+  final LocalBookRepository localRepository;
+  final RemoteBookRepository remoteRepository;
+  final SyncService syncService;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider.value(value: localRepository),
+        Provider.value(value: remoteRepository),
+        Provider.value(value: syncService),
+      ],
+      child: MaterialApp(
+        title: 'MyTome',
+        theme: ThemeData.light(),
+        home: const ReaderScreen(),
+      ),
+>>>>>>> 652928c0213b4284ebf349589dd4187ac5674b9b
     );
   }
 }
