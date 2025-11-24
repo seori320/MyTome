@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cloud_firestore: ^4.13.2
+<<<<<<< HEAD
 =======
 description: A new Flutter project integrated with Firebase.
 publish_to: 'none'
@@ -40,6 +41,9 @@ dependencies:
   hive_flutter: ^1.1.0
   provider: ^6.1.2
 >>>>>>> 652928c0213b4284ebf349589dd4187ac5674b9b
+=======
+  shared_preferences: ^2.2.2
+>>>>>>> 87592646d5bbf1b8ff974e62a446f3f3090244ff
 
 dev_dependencies:
   flutter_test:

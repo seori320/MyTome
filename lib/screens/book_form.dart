@@ -19,6 +19,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
   late final TextEditingController _titleController;
   late final TextEditingController _authorController;
   late final TextEditingController _descriptionController;
+  late final TextEditingController _tagsController;
   late bool _isCompleted;
   bool _isSaving = false;
 
@@ -32,6 +33,8 @@ class _BookFormScreenState extends State<BookFormScreen> {
     _authorController = TextEditingController(text: book?.author ?? '');
     _descriptionController =
         TextEditingController(text: book?.description ?? '');
+    _tagsController =
+        TextEditingController(text: book?.tags.join(', ') ?? '');
     _isCompleted = book?.isCompleted ?? false;
   }
 
@@ -40,6 +43,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
     _titleController.dispose();
     _authorController.dispose();
     _descriptionController.dispose();
+    _tagsController.dispose();
     super.dispose();
   }
 
@@ -53,11 +57,18 @@ class _BookFormScreenState extends State<BookFormScreen> {
     });
 
     final base = widget.book ?? Book.empty();
+    final tags = _tagsController.text
+        .split(',')
+        .map((value) => value.trim())
+        .where((value) => value.isNotEmpty)
+        .toSet()
+        .toList();
     final payload = base.copyWith(
       title: _titleController.text.trim(),
       author: _authorController.text.trim(),
       description: _descriptionController.text.trim(),
       isCompleted: _isCompleted,
+      tags: tags,
     );
 
     try {
@@ -131,6 +142,14 @@ class _BookFormScreenState extends State<BookFormScreen> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _tagsController,
+                decoration: const InputDecoration(
+                  labelText: '태그',
+                  hintText: '쉼표로 구분하여 태그를 입력하세요 (예: 판타지, 소설)',
+                ),
               ),
               const SizedBox(height: 16),
               TextFormField(
