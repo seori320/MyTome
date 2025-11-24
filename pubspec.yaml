@@ -1,4 +1,5 @@
 name: my_tome
+<<<<<<< HEAD
 description: A Flutter app for managing personal book collection.
 publish_to: 'none'
 version: 1.0.0+1
@@ -8,11 +9,32 @@ dependencies:
   flutter:
     sdk: flutter
   cloud_firestore: ^4.13.2
+=======
+description: A new Flutter project integrated with Firebase.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  firebase_core: ^2.27.1
+  cloud_firestore: ^4.15.5
+  firebase_auth: ^4.16.0
+>>>>>>> c7d6be6a991323bdcd66709b7c0ff3ed573369b5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+<<<<<<< HEAD
   flutter_lints: ^2.0.0
+=======
+  flutter_lints: ^3.0.1
+>>>>>>> c7d6be6a991323bdcd66709b7c0ff3ed573369b5
 
 flutter:
   uses-material-design: true
