@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
+import '../models/user_preferences.dart';
 import '../services/book_repository.dart';
 import 'book_form.dart';
+import '../widgets/reader_controls.dart';
 
 class BookDetailScreen extends StatefulWidget {
   const BookDetailScreen({super.key, required this.book});
@@ -18,6 +20,7 @@ class BookDetailScreen extends StatefulWidget {
 class _BookDetailScreenState extends State<BookDetailScreen> {
   final BookRepository _repository = BookRepository();
   late Book _book;
+  UserPreferences? _preferences;
   bool _isReadingMode = false;
   bool _isBusy = false;
 
@@ -25,6 +28,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   void initState() {
     super.initState();
     _book = widget.book;
+    _loadPreferences();
   }
 
   Future<void> _toggleCompleted(bool value) async {
@@ -62,8 +66,33 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     }
   }
 
+  Future<void> _loadPreferences() async {
+    final loaded = await UserPreferences.load();
+    if (mounted) {
+      setState(() {
+        _preferences = loaded;
+      });
+    }
+  }
+
+  Future<void> _updatePreferences(UserPreferences preferences) async {
+    await preferences.save();
+    if (mounted) {
+      setState(() {
+        _preferences = preferences;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final preferences = _preferences;
+    if (preferences == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return StreamBuilder<Book?>(
       stream: _repository.watchBook(_book.id),
       builder: (context, snapshot) {
@@ -97,18 +126,23 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         }
 
         final theme = Theme.of(context);
-        final backgroundColor =
-            _isReadingMode ? Colors.grey.shade900 : theme.colorScheme.background;
-        final textColor =
-            _isReadingMode ? Colors.white : theme.colorScheme.onBackground;
+        final backgroundColor = _isReadingMode
+            ? (preferences.useDarkTheme
+                ? Colors.grey.shade900
+                : theme.colorScheme.surfaceVariant)
+            : theme.colorScheme.background;
+        final textColor = _isReadingMode && preferences.useDarkTheme
+            ? Colors.white
+            : theme.colorScheme.onBackground;
 
         return Scaffold(
           backgroundColor: backgroundColor,
           appBar: AppBar(
             title: Text(latest.title),
             backgroundColor:
-                _isReadingMode ? Colors.grey.shade900 : theme.appBarTheme.backgroundColor,
-            foregroundColor: _isReadingMode ? Colors.white : null,
+                _isReadingMode ? backgroundColor : theme.appBarTheme.backgroundColor,
+            foregroundColor:
+                _isReadingMode && preferences.useDarkTheme ? Colors.white : null,
             actions: [
               IconButton(
                 tooltip: _isReadingMode ? '일반 모드로' : '읽기 모드',
@@ -141,7 +175,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 child: DefaultTextStyle(
                   style: theme.textTheme.bodyLarge!.copyWith(
                     height: 1.5,
-                    fontSize: _isReadingMode ? 20 : null,
+                    fontSize: _isReadingMode ? preferences.fontSize : null,
                     color: textColor,
                   ),
                   child: Column(
@@ -157,8 +191,25 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       const SizedBox(height: 8),
                       Text(
                         '저자: ${latest.author}',
-                        style: theme.textTheme.titleMedium!.copyWith(color: textColor),
+                        style:
+                            theme.textTheme.titleMedium!.copyWith(color: textColor),
                       ),
+                      if (latest.tags.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: latest.tags
+                              .map(
+                                (tag) => Chip(
+                                  label: Text(tag),
+                                  backgroundColor:
+                                      theme.colorScheme.primaryContainer,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                       const SizedBox(height: 24),
                       Text(latest.description),
                       const SizedBox(height: 24),
@@ -187,6 +238,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
             ),
           ),
+          bottomNavigationBar: _isReadingMode
+              ? ReaderControls(
+                  preferences: preferences,
+                  onChanged: _updatePreferences,
+                )
+              : null,
         );
       },
     );

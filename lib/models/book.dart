@@ -9,6 +9,7 @@ class Book {
     required this.isCompleted,
     required this.createdAt,
     this.updatedAt,
+    this.tags = const <String>[],
   });
 
   factory Book.empty() {
@@ -21,6 +22,7 @@ class Book {
       isCompleted: false,
       createdAt: now,
       updatedAt: now,
+      tags: const <String>[],
     );
   }
 
@@ -34,6 +36,7 @@ class Book {
       isCompleted: data['isCompleted'] as bool? ?? false,
       createdAt: _asDateTime(data['createdAt']) ?? DateTime.now(),
       updatedAt: _asDateTime(data['updatedAt']),
+      tags: _asStringList(data['tags']),
     );
   }
 
@@ -44,6 +47,7 @@ class Book {
   final bool isCompleted;
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final List<String> tags;
 
   Book copyWith({
     String? id,
@@ -53,6 +57,7 @@ class Book {
     bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<String>? tags,
   }) {
     return Book(
       id: id ?? this.id,
@@ -62,6 +67,7 @@ class Book {
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      tags: tags ?? this.tags,
     );
   }
 
@@ -73,6 +79,7 @@ class Book {
       'isCompleted': isCompleted,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      'tags': tags,
     }..removeWhere((_, value) => value == null);
   }
 
@@ -84,5 +91,12 @@ class Book {
       return value;
     }
     return null;
+  }
+
+  static List<String> _asStringList(dynamic value) {
+    if (value is Iterable) {
+      return value.map((e) => e.toString()).where((e) => e.isNotEmpty).toList();
+    }
+    return <String>[];
   }
 }
