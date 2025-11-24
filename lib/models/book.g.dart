@@ -1,8 +1,4 @@
-// GENERATED CODE - MANUALLY WRITTEN FOR OFFLINE USE
-// ignore_for_file: type=lint
-
-import 'package:hive/hive.dart';
-import 'book.dart';
+part of 'book.dart';
 
 class BookAdapter extends TypeAdapter<Book> {
   @override
@@ -18,22 +14,34 @@ class BookAdapter extends TypeAdapter<Book> {
     return Book(
       id: fields[0] as String,
       title: fields[1] as String,
-      content: fields[2] as String,
-      updatedAt: fields[3] as DateTime,
+      author: fields[2] as String,
+      description: fields[3] as String,
+      isCompleted: fields[4] as bool,
+      createdAt: fields[5] as DateTime,
+      updatedAt: fields[6] as DateTime,
+      tags: (fields[7] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Book obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.content)
+      ..write(obj.author)
       ..writeByte(3)
-      ..write(obj.updatedAt);
+      ..write(obj.description)
+      ..writeByte(4)
+      ..write(obj.isCompleted)
+      ..writeByte(5)
+      ..write(obj.createdAt)
+      ..writeByte(6)
+      ..write(obj.updatedAt)
+      ..writeByte(7)
+      ..write(obj.tags);
   }
 }

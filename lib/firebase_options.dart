@@ -28,12 +28,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'YOUR_WEB_API_KEY',
-    appId: '1:1234567890:web:abcdef123456',
-    messagingSenderId: '1234567890',
-    projectId: 'my-tome-project',
-    authDomain: 'my-tome-project.firebaseapp.com',
-    storageBucket: 'my-tome-project.appspot.com',
+    apiKey: 'AIzaSyDuNC1AX1TjRgO-N04bFkppITouOVdP7JY',
+    appId: '1:35395465388:web:1818b4d95c38f318c5ef09',
+    messagingSenderId: '35395465388',
+    projectId: 'mytome-e29ec',
+    authDomain: 'mytome-e29ec.firebaseapp.com',
+    storageBucket: 'mytome-e29ec.firebasestorage.app',
+    measurementId: 'G-VPGXZ651LP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -45,31 +46,31 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_IOS_API_KEY',
-    appId: '1:1234567890:ios:abcdef123456',
-    messagingSenderId: '1234567890',
-    projectId: 'my-tome-project',
-    storageBucket: 'my-tome-project.appspot.com',
-    iosClientId: '1234567890-abcdefghijklmnopqrstu.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mytome',
+    apiKey: 'AIzaSyDacIyu74Q1MdZ9XhOCfDsYyY1PoLlcDkk',
+    appId: '1:35395465388:ios:6f2773f3716d8f70c5ef09',
+    messagingSenderId: '35395465388',
+    projectId: 'mytome-e29ec',
+    storageBucket: 'mytome-e29ec.firebasestorage.app',
+    iosBundleId: 'com.mytome',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'YOUR_MACOS_API_KEY',
-    appId: '1:1234567890:ios:abcdef123456',
-    messagingSenderId: '1234567890',
-    projectId: 'my-tome-project',
-    storageBucket: 'my-tome-project.appspot.com',
-    iosClientId: '1234567890-abcdefghijklmnopqrstu.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mytome',
+    apiKey: 'AIzaSyDacIyu74Q1MdZ9XhOCfDsYyY1PoLlcDkk',
+    appId: '1:35395465388:ios:6f2773f3716d8f70c5ef09',
+    messagingSenderId: '35395465388',
+    projectId: 'mytome-e29ec',
+    storageBucket: 'mytome-e29ec.firebasestorage.app',
+    iosBundleId: 'com.mytome',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'YOUR_WINDOWS_API_KEY',
-    appId: '1:1234567890:web:abcdef123456',
-    messagingSenderId: '1234567890',
-    projectId: 'my-tome-project',
-    storageBucket: 'my-tome-project.appspot.com',
+    apiKey: 'AIzaSyDuNC1AX1TjRgO-N04bFkppITouOVdP7JY',
+    appId: '1:35395465388:web:335658e238e8c8afc5ef09',
+    messagingSenderId: '35395465388',
+    projectId: 'mytome-e29ec',
+    authDomain: 'mytome-e29ec.firebaseapp.com',
+    storageBucket: 'mytome-e29ec.firebasestorage.app',
+    measurementId: 'G-XL4YL1SSJB',
   );
 
   static const FirebaseOptions linux = FirebaseOptions(

@@ -1,25 +1,21 @@
-<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-=======
 import 'package:hive/hive.dart';
 
 part 'book.g.dart';
 
 @HiveType(typeId: 1)
->>>>>>> 652928c0213b4284ebf349589dd4187ac5674b9b
 class Book {
   Book({
     required this.id,
     required this.title,
-<<<<<<< HEAD
     required this.author,
     required this.description,
     required this.isCompleted,
     required this.createdAt,
-    this.updatedAt,
-    this.tags = const <String>[],
-  });
+    DateTime? updatedAt,
+    List<String>? tags,
+  })  : updatedAt = updatedAt ?? createdAt,
+        tags = tags ?? const <String>[];
 
   factory Book.empty() {
     final now = DateTime.now();
@@ -41,28 +37,59 @@ class Book {
       id: doc.id,
       title: data['title'] as String? ?? '',
       author: data['author'] as String? ?? '',
-      description: data['description'] as String? ?? '',
+      description: data['description'] as String? ?? (data['content'] as String? ?? ''),
       isCompleted: data['isCompleted'] as bool? ?? false,
       createdAt: _asDateTime(data['createdAt']) ?? DateTime.now(),
-      updatedAt: _asDateTime(data['updatedAt']),
+      updatedAt: _asDateTime(data['updatedAt']) ?? DateTime.now(),
       tags: _asStringList(data['tags']),
     );
   }
 
+  factory Book.fromMap(Map<String, dynamic> data) {
+    return Book(
+      id: data['id'] as String? ?? '',
+      title: data['title'] as String? ?? '',
+      author: data['author'] as String? ?? '',
+      description: data['description'] as String? ?? (data['content'] as String? ?? ''),
+      isCompleted: data['isCompleted'] as bool? ?? false,
+      createdAt: _asDateTime(data['createdAt']) ?? DateTime.now(),
+      updatedAt: _asDateTime(data['updatedAt']) ?? DateTime.now(),
+      tags: _asStringList(data['tags']),
+    );
+  }
+
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
   final String title;
+
+  @HiveField(2)
   final String author;
+
+  @HiveField(3)
   final String description;
+
+  @HiveField(4)
   final bool isCompleted;
+
+  @HiveField(5)
   final DateTime createdAt;
-  final DateTime? updatedAt;
+
+  @HiveField(6)
+  final DateTime updatedAt;
+
+  @HiveField(7)
   final List<String> tags;
+
+  String get content => description;
 
   Book copyWith({
     String? id,
     String? title,
     String? author,
     String? description,
+    String? content,
     bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -72,42 +99,14 @@ class Book {
       id: id ?? this.id,
       title: title ?? this.title,
       author: author ?? this.author,
-      description: description ?? this.description,
+      description: description ?? content ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
-=======
-    required this.content,
-    required this.updatedAt,
-  });
-
-  @HiveField(0)
-  final String id;
-
-  @HiveField(1)
-  final String title;
-
-  @HiveField(2)
-  final String content;
-
-  @HiveField(3)
-  final DateTime updatedAt;
-
-  Book copyWith({
-    String? title,
-    String? content,
-    DateTime? updatedAt,
-  }) {
-    return Book(
-      id: id,
-      title: title ?? this.title,
-      content: content ?? this.content,
->>>>>>> 652928c0213b4284ebf349589dd4187ac5674b9b
       updatedAt: updatedAt ?? this.updatedAt,
       tags: tags ?? this.tags,
     );
   }
 
-<<<<<<< HEAD
   Map<String, dynamic> toDocument() {
     return <String, dynamic>{
       'title': title,
@@ -115,9 +114,22 @@ class Book {
       'description': description,
       'isCompleted': isCompleted,
       'createdAt': Timestamp.fromDate(createdAt),
-      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      'updatedAt': Timestamp.fromDate(updatedAt),
       'tags': tags,
-    }..removeWhere((_, value) => value == null);
+    };
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'title': title,
+      'author': author,
+      'description': description,
+      'isCompleted': isCompleted,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'tags': tags,
+    };
   }
 
   static DateTime? _asDateTime(dynamic value) {
@@ -127,25 +139,10 @@ class Book {
     if (value is DateTime) {
       return value;
     }
+    if (value is String) {
+      return DateTime.tryParse(value);
+    }
     return null;
-=======
-  factory Book.fromMap(Map<String, dynamic> data) {
-    return Book(
-      id: data['id'] as String,
-      title: data['title'] as String? ?? '',
-      content: data['content'] as String? ?? '',
-      updatedAt: DateTime.parse(data['updatedAt'] as String),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'content': content,
-      'updatedAt': updatedAt.toIso8601String(),
-    };
->>>>>>> 652928c0213b4284ebf349589dd4187ac5674b9b
   }
 
   static List<String> _asStringList(dynamic value) {
