@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
 import 'models/book.dart';
+import 'screens/add_book_screen.dart';
 import 'screens/book_detail.dart';
-import 'screens/book_form.dart';
 import 'screens/book_list.dart';
+import 'screens/edit_book_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +29,15 @@ class MyTomeApp extends StatelessWidget {
       ),
       initialRoute: BookListScreen.routeName,
       onGenerateRoute: (settings) {
-        if (settings.name == BookFormScreen.routeName) {
-          final book = settings.arguments as Book?;
+        if (settings.name == AddBookScreen.routeName) {
           return MaterialPageRoute<Book?>(
-            builder: (_) => BookFormScreen(book: book),
+            builder: (_) => const AddBookScreen(),
+          );
+        }
+        if (settings.name == EditBookScreen.routeName) {
+          final book = settings.arguments as Book;
+          return MaterialPageRoute<Book?>(
+            builder: (_) => EditBookScreen(book: book),
           );
         }
         if (settings.name == BookDetailScreen.routeName) {

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../models/book.dart';
 import '../services/book_repository.dart';
+import 'add_book_screen.dart';
 import 'book_detail.dart';
-import 'book_form.dart';
+import 'edit_book_screen.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});
@@ -18,17 +19,28 @@ class _BookListScreenState extends State<BookListScreen> {
   final BookRepository _repository = BookRepository();
   String? _selectedTag;
 
-  Future<void> _openForm({Book? book}) async {
+  Future<void> _addBook() async {
     final result = await Navigator.of(context).pushNamed<Book?>(
-      BookFormScreen.routeName,
+      AddBookScreen.routeName,
+    );
+    if (result != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('새 책이 추가되었습니다.'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _editBook(Book book) async {
+    final result = await Navigator.of(context).pushNamed<Book?>(
+      EditBookScreen.routeName,
       arguments: book,
     );
     if (result != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            book == null ? '새 책이 추가되었습니다.' : '책 정보가 업데이트되었습니다.',
-          ),
+        const SnackBar(
+          content: Text('책 정보가 업데이트되었습니다.'),
         ),
       );
     }
@@ -88,7 +100,8 @@ class _BookListScreenState extends State<BookListScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.menu_book_outlined, size: 64, color: Colors.grey),
+                  const Icon(Icons.menu_book_outlined,
+                      size: 64, color: Colors.grey),
                   const SizedBox(height: 16),
                   Text(
                     _selectedTag == null
@@ -110,7 +123,9 @@ class _BookListScreenState extends State<BookListScreen> {
         final book = filteredBooks[index];
         return ListTile(
           leading: Icon(
-            book.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+            book.isCompleted
+                ? Icons.check_circle
+                : Icons.radio_button_unchecked,
             color: book.isCompleted ? Colors.green : Colors.grey,
           ),
           title: Text(book.title),
@@ -142,7 +157,7 @@ class _BookListScreenState extends State<BookListScreen> {
           ),
           trailing: IconButton(
             icon: const Icon(Icons.edit_outlined),
-            onPressed: () => _openForm(book: book),
+            onPressed: () => _editBook(book),
           ),
           onTap: () => _openDetail(book),
         );
@@ -159,7 +174,7 @@ class _BookListScreenState extends State<BookListScreen> {
         title: const Text('MyTome'),
         actions: [
           IconButton(
-            onPressed: () => _openForm(),
+            onPressed: () => _addBook(),
             icon: const Icon(Icons.add),
             tooltip: '책 추가',
           ),
@@ -200,7 +215,7 @@ class _BookListScreenState extends State<BookListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _openForm(),
+        onPressed: () => _addBook(),
         child: const Icon(Icons.add),
       ),
     );

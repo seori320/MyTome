@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../models/user_preferences.dart';
 import '../services/book_repository.dart';
-import 'book_form.dart';
+import 'edit_book_screen.dart';
 import '../widgets/reader_controls.dart';
 
 class BookDetailScreen extends StatefulWidget {
@@ -56,7 +56,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Future<void> _editBook() async {
     final updated = await Navigator.of(context).pushNamed<Book?>(
-      BookFormScreen.routeName,
+      EditBookScreen.routeName,
       arguments: _book,
     );
     if (updated != null) {
@@ -100,7 +100,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         if (latest != null && latest != _book) {
           _book = latest;
         }
-        if (snapshot.connectionState == ConnectionState.waiting && latest == null) {
+        if (snapshot.connectionState == ConnectionState.waiting &&
+            latest == null) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
@@ -139,10 +140,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           backgroundColor: backgroundColor,
           appBar: AppBar(
             title: Text(latest.title),
-            backgroundColor:
-                _isReadingMode ? backgroundColor : theme.appBarTheme.backgroundColor,
-            foregroundColor:
-                _isReadingMode && preferences.useDarkTheme ? Colors.white : null,
+            backgroundColor: _isReadingMode
+                ? backgroundColor
+                : theme.appBarTheme.backgroundColor,
+            foregroundColor: _isReadingMode && preferences.useDarkTheme
+                ? Colors.white
+                : null,
             actions: [
               IconButton(
                 tooltip: _isReadingMode ? '일반 모드로' : '읽기 모드',
@@ -152,7 +155,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   });
                 },
                 icon: Icon(
-                  _isReadingMode ? Icons.close_fullscreen : Icons.chrome_reader_mode,
+                  _isReadingMode
+                      ? Icons.close_fullscreen
+                      : Icons.chrome_reader_mode,
                 ),
               ),
               IconButton(
@@ -163,8 +168,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             ],
           ),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: _isBusy ? null : () => _toggleCompleted(!latest.isCompleted),
-            icon: Icon(latest.isCompleted ? Icons.check_circle : Icons.menu_book),
+            onPressed:
+                _isBusy ? null : () => _toggleCompleted(!latest.isCompleted),
+            icon:
+                Icon(latest.isCompleted ? Icons.check_circle : Icons.menu_book),
             label: Text(latest.isCompleted ? '다시 읽기' : '읽음 표시'),
           ),
           body: SafeArea(
@@ -191,8 +198,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       const SizedBox(height: 8),
                       Text(
                         '저자: ${latest.author}',
-                        style:
-                            theme.textTheme.titleMedium!.copyWith(color: textColor),
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: textColor),
                       ),
                       if (latest.tags.isNotEmpty) ...[
                         const SizedBox(height: 12),
