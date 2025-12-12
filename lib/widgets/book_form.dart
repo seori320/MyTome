@@ -26,7 +26,6 @@ class _BookFormState extends State<BookForm> {
   late final TextEditingController _authorController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _tagsController;
-  late bool _isCompleted;
 
   @override
   void initState() {
@@ -37,7 +36,6 @@ class _BookFormState extends State<BookForm> {
     _descriptionController =
         TextEditingController(text: book?.description ?? '');
     _tagsController = TextEditingController(text: book?.tags.join(', ') ?? '');
-    _isCompleted = book?.isCompleted ?? false;
   }
 
   @override
@@ -66,7 +64,6 @@ class _BookFormState extends State<BookForm> {
       title: _titleController.text.trim(),
       author: _authorController.text.trim(),
       description: _descriptionController.text.trim(),
-      isCompleted: _isCompleted,
       tags: tags,
     );
 
@@ -137,13 +134,6 @@ class _BookFormState extends State<BookForm> {
                 }
                 return null;
               },
-            ),
-            const SizedBox(height: 24),
-            SwitchListTile(
-              value: _isCompleted,
-              onChanged: (value) => setState(() => _isCompleted = value),
-              title: const Text('읽기 완료'),
-              subtitle: const Text('책을 이미 다 읽었다면 켜주세요'),
             ),
             const SizedBox(height: 32),
             FilledButton.icon(

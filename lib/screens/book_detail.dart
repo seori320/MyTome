@@ -22,36 +22,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   late Book _book;
   UserPreferences? _preferences;
   bool _isReadingMode = false;
-  bool _isBusy = false;
 
   @override
   void initState() {
     super.initState();
     _book = widget.book;
     _loadPreferences();
-  }
-
-  Future<void> _toggleCompleted(bool value) async {
-    if (_isBusy) return;
-    setState(() {
-      _isBusy = true;
-    });
-    final updated = _book.copyWith(isCompleted: value);
-    try {
-      await _repository.update(updated);
-      setState(() {
-        _book = updated;
-        _isBusy = false;
-      });
-    } on Object catch (error) {
-      if (!mounted) return;
-      setState(() {
-        _isBusy = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('상태를 변경할 수 없습니다. 다시 시도해주세요.\n$error')),
-      );
-    }
   }
 
   Future<void> _editBook() async {
@@ -167,13 +143,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed:
-                _isBusy ? null : () => _toggleCompleted(!latest.isCompleted),
-            icon:
-                Icon(latest.isCompleted ? Icons.check_circle : Icons.menu_book),
-            label: Text(latest.isCompleted ? '다시 읽기' : '읽음 표시'),
-          ),
           body: SafeArea(
             child: AnimatedPadding(
               duration: const Duration(milliseconds: 300),
@@ -230,14 +199,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               style: theme.textTheme.bodySmall,
                             ),
                           ],
-                        ),
-                      if (!_isReadingMode) const SizedBox(height: 16),
-                      if (!_isReadingMode)
-                        SwitchListTile(
-                          value: latest.isCompleted,
-                          onChanged: _isBusy ? null : _toggleCompleted,
-                          title: const Text('읽기 완료'),
-                          subtitle: const Text('책을 모두 읽었을 때 완료 상태로 표시하세요.'),
                         ),
                     ],
                   ),

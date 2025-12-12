@@ -122,12 +122,6 @@ class _BookListScreenState extends State<BookListScreen> {
       itemBuilder: (context, index) {
         final book = filteredBooks[index];
         return ListTile(
-          leading: Icon(
-            book.isCompleted
-                ? Icons.check_circle
-                : Icons.radio_button_unchecked,
-            color: book.isCompleted ? Colors.green : Colors.grey,
-          ),
           title: Text(book.title),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -10,7 +10,6 @@ class Book {
     required this.title,
     required this.author,
     required this.description,
-    required this.isCompleted,
     required this.createdAt,
     DateTime? updatedAt,
     List<String>? tags,
@@ -24,7 +23,6 @@ class Book {
       title: '',
       author: '',
       description: '',
-      isCompleted: false,
       createdAt: now,
       updatedAt: now,
       tags: const <String>[],
@@ -37,8 +35,8 @@ class Book {
       id: doc.id,
       title: data['title'] as String? ?? '',
       author: data['author'] as String? ?? '',
-      description: data['description'] as String? ?? (data['content'] as String? ?? ''),
-      isCompleted: data['isCompleted'] as bool? ?? false,
+      description:
+          data['description'] as String? ?? (data['content'] as String? ?? ''),
       createdAt: _asDateTime(data['createdAt']) ?? DateTime.now(),
       updatedAt: _asDateTime(data['updatedAt']) ?? DateTime.now(),
       tags: _asStringList(data['tags']),
@@ -50,8 +48,8 @@ class Book {
       id: data['id'] as String? ?? '',
       title: data['title'] as String? ?? '',
       author: data['author'] as String? ?? '',
-      description: data['description'] as String? ?? (data['content'] as String? ?? ''),
-      isCompleted: data['isCompleted'] as bool? ?? false,
+      description:
+          data['description'] as String? ?? (data['content'] as String? ?? ''),
       createdAt: _asDateTime(data['createdAt']) ?? DateTime.now(),
       updatedAt: _asDateTime(data['updatedAt']) ?? DateTime.now(),
       tags: _asStringList(data['tags']),
@@ -70,9 +68,6 @@ class Book {
   @HiveField(3)
   final String description;
 
-  @HiveField(4)
-  final bool isCompleted;
-
   @HiveField(5)
   final DateTime createdAt;
 
@@ -90,7 +85,6 @@ class Book {
     String? author,
     String? description,
     String? content,
-    bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
     List<String>? tags,
@@ -100,7 +94,6 @@ class Book {
       title: title ?? this.title,
       author: author ?? this.author,
       description: description ?? content ?? this.description,
-      isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       tags: tags ?? this.tags,
@@ -112,7 +105,6 @@ class Book {
       'title': title,
       'author': author,
       'description': description,
-      'isCompleted': isCompleted,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
       'tags': tags,
@@ -125,7 +117,6 @@ class Book {
       'title': title,
       'author': author,
       'description': description,
-      'isCompleted': isCompleted,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'tags': tags,
